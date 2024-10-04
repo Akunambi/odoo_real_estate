@@ -74,5 +74,4 @@ class EstateProperty(models.Model):
             comparison = record.expected_price * 0.9
             if float_compare(record.selling_price, comparison, precision_rounding=2) < 0:
                 raise exceptions.ValidationError("Selling price is lower than 90 percent of the expected price")
-            elif float_is_zero(record.selling_price,precision_rounding=2):
-                return True
+            

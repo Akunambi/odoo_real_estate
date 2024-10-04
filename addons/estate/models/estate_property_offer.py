@@ -38,12 +38,12 @@ class EstatePropertyOffer(models.Model):
             record.status = "accepted"
             record.property_id.selling_price= record.price
             record.property_id.buyer_id = record.partner_id
+            record.property_id.state = "offerAccepted"
         
         return True
     def set_status_rejected(self):
         for record in self:
             record.status = "rejected"
-            record.property_id.selling_price=0
             record.property_id.buyer_id = ""
 
         

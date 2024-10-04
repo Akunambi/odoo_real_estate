@@ -10,10 +10,8 @@
                 <field name="partner_id"/>
                 <field name="validity"/>
                 <field name="date_deadline"/>
-                <group invisible="">
-                <button name="set_status_accepted" type="object" icon="fa-check"/>
-                <button name="set_status_rejected" type="object" icon="fa-times"/>
-                </group>
+                <button invisible="status in ['accepted', 'rejected' ]" name="set_status_accepted" type="object" icon="fa-check"/>
+                <button invisible="status in ['accepted', 'rejected' ]" name="set_status_rejected" type="object" icon="fa-times"/>
                 <field name="status"/>
             </tree>
         </field>
