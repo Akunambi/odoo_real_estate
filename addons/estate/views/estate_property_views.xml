@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- ESTATE PROPERTY ROOT -->
+    <record id="estate_property_action" model="ir.actions.act_window">
+        <field name="name">Properties</field>
+        <field name="res_model">estate.property</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="estate_property_tree" model="ir.ui.view">
+        <field name="name">Tree</field>
+        <field name="model">estate.property</field>
+        <field name="arch" type="xml">
+            <tree string="Channel">
+                <field name="name"/>
+                <field name="postcode"/>
+                <field name="bedrooms"/>
+                <field name="living_area"/>
+                <field name="expected_price"/>
+                <field name="selling_price"/>
+                <field name="date_availability"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="estate_property_form" model="ir.ui.view">
+        <field name="name">form</field>
+        <field name="model">estate.property</field>
+        <field name="arch" type="xml">
+            <form string="Properties">
+            <header>
+                <group invisible="state == 'sold'">
+                <button name="update_status_canceled" type="object" string="Cancel"/>
+                <button name="update_status_sold" type="object" string="Sold"/>
+                </group>
+                <field name="state" widget="statusbar"/>
+            </header>
+                <sheet>
+                    <div>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" />
+                    </div>
+                    <div style='display : flex; justify-content:between; gap:8rem; margin-top:2rem'>
+                        <group>
+                            <field name="state"/>
+                            <field name="property_type_id" options="{'no_create':true}" />
+                            <field name="postcode"/>
+                            <field name="date_availability"/>
+                        </group>
+                        <group>
+                            <field name="expected_price"/>
+                            <field name="best_offer"/>
+                            <field name="selling_price"/>
+                        </group>
+                    </div>
+                    <div>
+                        <notebook>
+                            <page string="Description">
+                                <group>
+                                    <field name="description"/>
+                                    <field name="bedrooms"/>
+                                    <field name="living_area"/>
+                                    <field name="facades"/>
+                                    <field name="garage"/>
+                                    <field name="garden"/>
+                                    <field name="garden_area" invisible="not garden" />
+                                    <field name="garden_orientation" invisible="not garden" />
+                                    <field name="total_area"/>
+                                </group>
+                            </page>
+                            <page string="Offers">
+                                <field name="offer_ids"/>
+                            </page>
+                            <page string="Other Info">
+                                <group>
+
+                                    <field name="seller_id"/>
+                                    <field name="buyer_id"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="estate_property_search" model="ir.ui.view">
+        <field name="name">serch</field>
+        <field name="model">estate.property</field>
+        <field name="arch" type="xml">
+            <search string="Search Property">
+                <field name="name"/>
+                <field name="postcode"/>
+                <field name="expected_price"/>
+                <field name="bedrooms"/>
+                <field name="living_area"/>
+                <field name="facades"/>
+                <separator/>
+                <filter string="Available" name="state" domain="['|',('state', '=' , 'new'),('state', '=' , 'offerReceived')]" />
+                <group expand="1" string="Group By">
+                    <filter string="Postcode" name="postcode" context="{'group_by':'postcode'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>
