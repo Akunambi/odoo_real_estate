@@ -1,3 +1,8 @@
+# Copyright 2015 Therp BV <http://therp.nl>
+# Copyright 2016 Pedro M. Baeza
+# Copyright 2024 OERP Canada <https://www.oerp.ca>
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
 import base64
 import hashlib
 import io
@@ -18,6 +23,10 @@ class ResCompany(models.Model):
         with tools.file_open(img_path, "rb") as f:
             if original:
                 return base64.b64encode(f.read())
+            # Modify the source image to add a colored bar on the bottom
+            # This could seem overkill to modify the pixels 1 by 1, but
+            # Pillow doesn't provide an easy way to do it, and this
+            # is acceptable for a 16x16 image.
             color = (
                 randrange(32, 224, 24),
                 randrange(32, 224, 24),
@@ -59,9 +68,6 @@ class ResCompany(models.Model):
     @api.model
     def _get_favicon(self):
         """Returns a local url that points to the image field of a given record."""
-        if self.env.context.get("website_id"):
-            website = self.env["website"].browse(self.env.context.get("website_id"))
-            return website.image_url(website, "favicon")
         company_id = (
             request.httprequest.cookies.get("cids")
             if request.httprequest.cookies.get("cids")
@@ -76,6 +82,6 @@ class ResCompany(models.Model):
             sha = hashlib.sha512(str(company.write_date).encode("utf-8")).hexdigest()[
                 :7
             ]
-            return f"/web/image/{self._name}/{company.id}/favicon?unique={sha}"
+            return f"/web/image/{self._name}/{company_id}/favicon?unique={sha}"
         else:
             return False
